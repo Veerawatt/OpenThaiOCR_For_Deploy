@@ -1,0 +1,17 @@
+# For Coolify. Coolify's own proxy (Traefik) handles the domain and HTTPS,
+# so there is no Caddy here and no ports bound on the host.
+# In Coolify: Docker Compose Location = /docker-compose.coolify.yml
+services:
+  ocr:
+    build: .
+    restart: unless-stopped
+    environment:
+      - SERVICE_FQDN_OCR_8000          # Coolify routes the domain you set to port 8000
+      - API_KEY=${API_KEY:?set API_KEY in Coolify}
+      - OCR_WORKERS=${OCR_WORKERS:-2}
+      - MAX_UPLOAD_MB=${MAX_UPLOAD_MB:-25}
+      - MAX_PDF_PAGES=${MAX_PDF_PAGES:-50}
+      - PDF_DPI=${PDF_DPI:-200}
+    expose:
+      - "8000"
+    mem_limit: 3g

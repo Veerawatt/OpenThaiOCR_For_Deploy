@@ -71,6 +71,20 @@ grep API_KEY /opt/openthai-ocr/.env
 cd /opt/openthai-ocr && docker compose up -d
 ```
 
+## ติดตั้งผ่าน Coolify
+
+Coolify มี proxy (Traefik) จัดการโดเมนและ HTTPS ให้อยู่แล้ว **ห้ามใช้ `docker-compose.yml` หลัก** (มี Caddy ที่ชนพอร์ต 80/443
+และ mount `Caddyfile` ไม่ได้บน Coolify) ให้ใช้ `docker-compose.coolify.yml` แทน
+
+1. ในหน้า resource → **Configuration → General**
+   - Build Pack: **Docker Compose**
+   - Docker Compose Location: **`/docker-compose.coolify.yml`**
+2. **Environment Variables:** ใส่ `API_KEY` (สร้างด้วย `openssl rand -hex 24`)
+3. **Domains** ของ service `ocr`: ใส่ `https://ocr.yourdomain.com` (DNS A record ชี้มาที่ IP ของ VPS)
+4. กด **Deploy** แล้วเปิด `https://ocr.yourdomain.com/health`
+
+อีกทางที่ง่ายกว่า: สร้าง resource ใหม่แบบ Build Pack **Dockerfile**, Ports Exposes = `8000`, ใส่ `API_KEY` ใน Environment Variables
+
 ## การเรียกใช้ API
 
 ข้อความล้วน:
