@@ -1,0 +1,10 @@
+# secrets
+.env
+
+# local Python env and downloaded model (re-create with scripts/download_model.py)
+.venv/
+models/
+
+__pycache__/
+*.pyc
+.DS_Store

@@ -1,0 +1,14 @@
+# DOMAIN comes from .env.
+#   DOMAIN=ocr.example.com  -> automatic HTTPS (Let's Encrypt)
+#   DOMAIN=:80              -> plain HTTP on the server IP (no domain yet)
+{$DOMAIN::80} {
+	encode gzip
+	request_body {
+		max_size 50MB
+	}
+	reverse_proxy ocr:8000 {
+		transport http {
+			read_timeout 300s
+		}
+	}
+}

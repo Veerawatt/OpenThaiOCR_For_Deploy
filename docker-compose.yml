@@ -1,0 +1,36 @@
+services:
+  ocr:
+    build: .
+    image: openthai-ocr:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      OCR_WORKERS: ${OCR_WORKERS:-2}
+    expose:
+      - "8000"
+    # Each worker uses ~450 MB; 2 workers fit KVM2 (8 GB) with lots of room.
+    mem_limit: 3g
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on: [ocr]
+    env_file: .env
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+volumes:
+  caddy_data:
+  caddy_config:

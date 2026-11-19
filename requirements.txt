@@ -1,0 +1,16 @@
+# Web service
+fastapi>=0.115,<1
+uvicorn[standard]>=0.30,<1
+python-multipart>=0.0.9
+pypdfium2>=4.30,<6          # renders PDF pages to images
+
+# Model download (build time)
+huggingface_hub>=0.25
+
+# OpenThai OCR runtime (from the model's own requirements.txt, v2.1.4)
+numpy>=2.0,<3
+opencv-python-headless>=4.8
+pyclipper>=1.3
+pillow>=10
+openvino>=2024.0; platform_machine == "x86_64" or platform_machine == "AMD64"
+onnxruntime>=1.17
